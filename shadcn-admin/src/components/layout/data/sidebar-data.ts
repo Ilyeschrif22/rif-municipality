@@ -1,0 +1,95 @@
+import { IconBuilding, IconUsers, IconSettings, IconHelp, IconBell, IconUserCog, IconTool, IconPalette, IconBrowserCheck, IconChecklist, IconHome } from '@tabler/icons-react'
+import { GalleryVerticalEnd } from 'lucide-react'
+import { type SidebarData } from '../types'
+import { serviceDefinitions } from '@/features/requests/data/services'
+
+export const sidebarData: SidebarData = {
+  user: {
+    name: 'Mairie de Tunis',
+    email: 'contact@tunis.tn',
+    avatar: '/avatars/municipality.jpg',
+  },
+  teams: [
+    {
+      name: 'Mairie de Tunis',
+      logo: IconBuilding,
+      plan: 'Plan principal',
+    },
+    {
+      name: 'Mairie de Sfax',
+      logo: GalleryVerticalEnd,
+      plan: 'Plan avancé',
+    },
+  ],
+  navGroups: [
+    {
+      title: 'Général',
+      items: [
+        {
+          title: 'Tableau de bord',
+          url: '/',
+          icon: IconHome,
+        },
+        {
+          title: 'Services municipaux',
+          icon: IconChecklist,
+          items: [
+            ...serviceDefinitions.map((s) => ({ title: s.shortLabel ?? s.label, url: (`/services/${s.value}` as unknown) as any })),
+          ],
+        },
+        {
+          title: 'Utilisateurs',
+          url: '/users',
+          icon: IconUsers,
+        },
+      ],
+    },
+    {
+      title: 'Paramètres',
+      items: [
+        {
+          title: 'Général',
+          icon: IconSettings,
+          items: [
+            {
+              title: 'Profil',
+              url: '/settings',
+              icon: IconUserCog,
+            },
+            {
+              title: 'Compte',
+              url: '/settings/account',
+              icon: IconTool,
+            },
+            {
+              title: 'Apparence',
+              url: '/settings/appearance',
+              icon: IconPalette,
+            },
+            {
+              title: 'Notifications',
+              url: '/settings/notifications',
+              icon: IconBell,
+            },
+            {
+              title: 'Affichage',
+              url: '/settings/display',
+              icon: IconBrowserCheck,
+            },
+          ],
+        },
+      ],
+    },
+        {
+          title: 'Autres',
+          items: [
+            {
+              title: 'Centre d’aide',
+              url: '/help-center',
+              icon: IconHelp,
+            },
+            // { title: 'Messages', url: '/messages', icon: IconMessages },
+          ],
+        },
+  ],
+}

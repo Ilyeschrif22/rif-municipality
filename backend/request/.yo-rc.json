@@ -1,0 +1,20 @@
+{
+  "generator-jhipster": {
+    "applicationIndex": 3,
+    "applicationType": "microservice",
+    "authenticationType": "jwt",
+    "baseName": "request",
+    "buildTool": "maven",
+    "entities": ["Request"],
+    "jhipsterVersion": "8.11.0",
+    "jwtSecretKey": "MzcyOWY3OTc1YzRmZWIzYzUyYTRhNjhiODJiNjk4ZWU5NDQ4NWY4MTI4NzgwOWRiYmRhZTM5NWQ4MTFkNDI5MmE3YzRhNzVhZTk2OWQ5MjJlOGRmYzNlMWIwNDRlODU0NjliZDQ2NjhlMTFjNGM1NTQ3NGIwNWFkYWMwMTQ4ZjU=",
+    "languages": ["en"],
+    "lastLiquibaseTimestamp": 1754250478000,
+    "nativeLanguage": "en",
+    "packageName": "com.example.request",
+    "serverPort": 8083,
+    "serviceDiscoveryType": "eureka",
+    "skipClient": true,
+    "skipUserManagement": true
+  }
+}

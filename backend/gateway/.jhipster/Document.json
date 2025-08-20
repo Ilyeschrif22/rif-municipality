@@ -1,0 +1,42 @@
+{
+  "annotations": {
+    "changelogDate": "20250803195058"
+  },
+  "applications": ["gateway", "document"],
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "issueDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "file",
+      "fieldType": "Blob",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fileContentType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "citizenId",
+      "fieldType": "Long"
+    }
+  ],
+  "name": "Document",
+  "pagination": "pagination",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

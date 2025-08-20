@@ -1,0 +1,111 @@
+application {
+  config {
+    baseName gateway
+    applicationType gateway
+    packageName com.example.gateway
+    serviceDiscoveryType eureka
+    authenticationType jwt
+    clientFramework react
+    buildTool maven
+    skipUserManagement true
+    languages [en, fr]
+  }
+  entities AppUser, Municipality, Request, Document
+}
+
+application {
+  config {
+    baseName user
+    applicationType microservice
+    packageName com.example.user
+    serviceDiscoveryType eureka
+    authenticationType jwt
+    buildTool maven
+  }
+  entities AppUser
+}
+
+application {
+  config {
+    baseName municipality
+    applicationType microservice
+    packageName com.example.municipality
+    serviceDiscoveryType eureka
+    authenticationType jwt
+    buildTool maven
+  }
+  entities Municipality
+}
+
+application {
+  config {
+    baseName request
+    applicationType microservice
+    packageName com.example.request
+    serviceDiscoveryType eureka
+    authenticationType jwt
+    buildTool maven
+  }
+  entities Request
+}
+
+application {
+  config {
+    baseName document
+    applicationType microservice
+    packageName com.example.document
+    serviceDiscoveryType eureka
+    authenticationType jwt
+    buildTool maven
+  }
+  entities Document
+}
+
+entity AppUser {
+  login String required
+  firstName String
+  lastName String
+  email String required
+  phone String
+  role String required
+  cin String required
+  address String
+  birthDate LocalDate
+  municipalityId Long
+}
+
+entity Municipality {
+  name String required
+  region String required
+  country String required
+}
+
+entity Request {
+  type String required
+  description String required
+  status RequestStatus required
+  createdDate Instant
+  resolvedDate Instant
+  citizenId Long
+  municipalityId Long
+}
+
+entity Document {
+  title String required
+  type String required
+  issueDate Instant
+  file Blob required
+  fileContentType String
+  citizenId Long
+}
+
+enum RequestStatus {
+  PENDING
+  IN_PROGRESS
+  RESOLVED
+  REJECTED
+}
+
+dto * with mapstruct
+paginate * with pagination
+service * with serviceImpl

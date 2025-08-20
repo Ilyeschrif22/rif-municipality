@@ -1,0 +1,26 @@
+{
+  "gatewayApp": {
+    "municipality": {
+      "home": {
+        "title": "Municipalities",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Municipality",
+        "createOrEditLabel": "Créer ou éditer un Municipality",
+        "notFound": "Aucun Municipality trouvé"
+      },
+      "created": "Un nouveau Municipality a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Municipality avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Municipality avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Municipality {{ id }} ?"
+      },
+      "detail": {
+        "title": "Municipality"
+      },
+      "id": "ID",
+      "name": "Name",
+      "region": "Region",
+      "country": "Country"
+    }
+  }
+}

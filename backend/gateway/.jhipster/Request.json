@@ -1,0 +1,47 @@
+{
+  "annotations": {
+    "changelogDate": "20250803194958"
+  },
+  "applications": ["gateway", "request"],
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "type",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "RequestStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PENDING,IN_PROGRESS,RESOLVED,REJECTED"
+    },
+    {
+      "fieldName": "createdDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "resolvedDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "citizenId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "municipalityId",
+      "fieldType": "Long"
+    }
+  ],
+  "name": "Request",
+  "pagination": "pagination",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

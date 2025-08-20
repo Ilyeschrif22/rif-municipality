@@ -1,0 +1,20 @@
+{
+  "generator-jhipster": {
+    "applicationIndex": 2,
+    "applicationType": "microservice",
+    "authenticationType": "jwt",
+    "baseName": "municipality",
+    "buildTool": "maven",
+    "entities": ["Municipality"],
+    "jhipsterVersion": "8.11.0",
+    "jwtSecretKey": "Nzk0MjFkNTAyZmI5MjlhNjJiZTJiZTM1OTIyMjZkMmUyZGJjNDY0NGI1OGE5Y2ZjNTM5MWRjMTZhMzBhNWE2ODBmZGI4YjY2ZDFmMjgzOWEwMWY0ODJlMGQwZDA2YWI4ZTYxMjVhNWY0ZDczOTk5MmRiOTQ3ODkyYTMwZjg0Mjg=",
+    "languages": ["en"],
+    "lastLiquibaseTimestamp": 1754250478000,
+    "nativeLanguage": "en",
+    "packageName": "com.example.municipality",
+    "serverPort": 8082,
+    "serviceDiscoveryType": "eureka",
+    "skipClient": true,
+    "skipUserManagement": true
+  }
+}
