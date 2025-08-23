@@ -1,7 +1,17 @@
-import { IconBuilding, IconUsers, IconSettings, IconHelp, IconBell, IconUserCog, IconTool, IconPalette, IconBrowserCheck, IconChecklist, IconHome } from '@tabler/icons-react'
-import { GalleryVerticalEnd } from 'lucide-react'
-import { type SidebarData } from '../types'
+import {
+  IconUsers,
+  IconSettings,
+  IconHelp,
+  IconBell,
+  IconUserCog,
+  IconTool,
+  IconPalette,
+  IconBrowserCheck,
+  IconChecklist,
+  IconHome,
+} from '@tabler/icons-react'
 import { serviceDefinitions } from '@/features/requests/data/services'
+import { type SidebarData } from '../types'
 
 export const sidebarData: SidebarData = {
   user: {
@@ -9,18 +19,6 @@ export const sidebarData: SidebarData = {
     email: 'contact@tunis.tn',
     avatar: '/avatars/municipality.jpg',
   },
-  teams: [
-    {
-      name: 'Mairie de Tunis',
-      logo: IconBuilding,
-      plan: 'Plan principal',
-    },
-    {
-      name: 'Mairie de Sfax',
-      logo: GalleryVerticalEnd,
-      plan: 'Plan avancé',
-    },
-  ],
   navGroups: [
     {
       title: 'Général',
@@ -34,7 +32,10 @@ export const sidebarData: SidebarData = {
           title: 'Services municipaux',
           icon: IconChecklist,
           items: [
-            ...serviceDefinitions.map((s) => ({ title: s.shortLabel ?? s.label, url: (`/services/${s.value}` as unknown) as any })),
+            ...serviceDefinitions.map((s) => ({
+              title: s.shortLabel ?? s.label,
+              url: `/services/${s.value}` as unknown as any,
+            })),
           ],
         },
         {
@@ -80,16 +81,15 @@ export const sidebarData: SidebarData = {
         },
       ],
     },
+    {
+      title: 'Autres',
+      items: [
         {
-          title: 'Autres',
-          items: [
-            {
-              title: 'Centre d’aide',
-              url: '/help-center',
-              icon: IconHelp,
-            },
-            // { title: 'Messages', url: '/messages', icon: IconMessages },
-          ],
+          title: 'Centre d’aide',
+          url: '/help-center',
+          icon: IconHelp,
         },
+      ],
+    },
   ],
 }
