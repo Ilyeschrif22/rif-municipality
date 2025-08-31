@@ -1,31 +1,27 @@
-import { Header } from '@/components/layout/header'
-import { Main } from '@/components/layout/main'
-import { ProfileDropdown } from '@/components/profile-dropdown'
-import { Search } from '@/components/search'
-import { ThemeSwitch } from '@/components/theme-switch'
-import { columns } from './components/users-columns'
-import { UsersDialogs } from './components/users-dialogs'
-import { UsersPrimaryButtons } from './components/users-primary-buttons'
-import { UsersTable } from './components/users-table'
-import UsersProvider from './context/users-context'
-import { userListSchema, type User } from './data/schema'
-import { useQuery } from '@tanstack/react-query'
-import { fetchAppUsers } from '@/lib/api'
+import { Header } from '@/components/layout/header';
+import { Main } from '@/components/layout/main';
+import { ProfileDropdown } from '@/components/profile-dropdown';
+import { Search } from '@/components/search';
+import { ThemeSwitch } from '@/components/theme-switch';
+import { columns } from './components/users-columns';
+import { UsersDialogs } from './components/users-dialogs';
+import { UsersPrimaryButtons } from './components/users-primary-buttons';
+import { UsersTable } from './components/users-table';
+import UsersProvider from './context/users-context';
+import { userListSchema, type User } from './data/schema';
+import { useQuery } from '@tanstack/react-query';
+import { fetchAppUsers } from '@/lib/api';
+import { useAuthStore } from '@/stores/authStore'; 
 
 export default function Users() {
+  const { user } = useAuthStore((s) => s.auth); 
+  const userRole = user?.role; // Extract the role array (e.g., ["ROLE_ADMIN"])
+
   const { data } = useQuery({
     queryKey: ['users'],
     queryFn: async () => {
-      const list = await fetchAppUsers()
-      // map AppUserDTO -> User rows
-      const normalizeRole = (role?: string): User['role'] => {
-        if (!role) return 'manager'
-        const r = role.toLowerCase()
-        if (r === 'superadmin' || r === 'super-admin' || r === 'super_admin') return 'superadmin'
-        if (r === 'admin') return 'admin'
-        if (r === 'cashier') return 'cashier'
-        return 'manager'
-      }
+      const list = await fetchAppUsers();
+   
       const mapped: User[] = list.map((u) => ({
         id: String(u.id),
         firstName: u.firstName || '',
@@ -33,20 +29,28 @@ export default function Users() {
         username: u.cin,
         email: u.email,
         phoneNumber: u.phone || '',
-        status: 'active',
-        role: normalizeRole(u.role),
+        role: u.role,
         createdAt: new Date(),
         updatedAt: new Date(),
-      }))
-      const parsed = userListSchema.safeParse(mapped)
-      return parsed.success ? parsed.data : mapped
+      }));
+      const parsed = userListSchema.safeParse(mapped);
+      return parsed.success ? parsed.data : mapped;
     },
-  })
+  });
+
+  if (!userRole?.includes('ROLE_ADMIN')) {
+    return (
+      <Main>
+        <div className='p-4'>
+          <p className='text-red-600'>You do not have permission to view the user list.</p>
+        </div>
+      </Main>
+    );
+  }
 
   return (
     <UsersProvider>
       <Header fixed>
-        <Search />
         <div className='ml-auto flex items-center space-x-4'>
           <ThemeSwitch />
           <ProfileDropdown />
@@ -70,5 +74,5 @@ export default function Users() {
 
       <UsersDialogs />
     </UsersProvider>
-  )
+  );
 }

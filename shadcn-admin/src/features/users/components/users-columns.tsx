@@ -1,9 +1,9 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { cn } from '@/lib/utils'
-import { Badge } from '@/components/ui/badge'
+// import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import LongText from '@/components/long-text'
-import { callTypes, userTypes } from '../data/data'
+import { userTypes } from '../data/data'
 import { User } from '../data/schema'
 import { DataTableColumnHeader } from './data-table-column-header'
 import { DataTableRowActions } from './data-table-row-actions'
@@ -47,6 +47,21 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => (
       <LongText className='max-w-36'>{row.getValue('username')}</LongText>
     ),
+    filterFn: (row, _unusedId, value) => {
+      const query = String(value ?? '').toLowerCase().trim()
+      if (!query) return true
+      const { firstName, lastName, username } = row.original
+      const cin = String(username ?? '').toLowerCase()
+      const first = String(firstName ?? '').toLowerCase()
+      const last = String(lastName ?? '').toLowerCase()
+      const full = `${first} ${last}`.trim()
+      return (
+        cin.includes(query) ||
+        first.includes(query) ||
+        last.includes(query) ||
+        full.includes(query)
+      )
+    },
     meta: {
       className: cn(
         'drop-shadow-[0_1px_2px_rgb(0_0_0_/_0.1)] dark:drop-shadow-[0_1px_2px_rgb(255_255_255_/_0.1)] lg:drop-shadow-none',
@@ -86,28 +101,6 @@ export const columns: ColumnDef<User>[] = [
     enableSorting: false,
   },
   {
-    accessorKey: 'status',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Status' />
-    ),
-    cell: ({ row }) => {
-      const { status } = row.original
-      const badgeColor = callTypes.get(status)
-      return (
-        <div className='flex space-x-2'>
-          <Badge variant='outline' className={cn('capitalize', badgeColor)}>
-            {row.getValue('status')}
-          </Badge>
-        </div>
-      )
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id))
-    },
-    enableHiding: false,
-    enableSorting: false,
-  },
-  {
     accessorKey: 'role',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Role' />
@@ -126,8 +119,9 @@ export const columns: ColumnDef<User>[] = [
         </div>
       )
     },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id))
+    filterFn: (row, _unused, value) => {
+      const v = String(row.getValue('role') ?? '').toLowerCase()
+      return value.map((x: string) => String(x).toLowerCase()).includes(v)
     },
     enableSorting: false,
     enableHiding: false,

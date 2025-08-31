@@ -14,6 +14,7 @@ import { requestListSchema, type RequestRow } from '@/features/requests/data/sch
 import { RequestsProvider } from '@/features/requests/context/requests-context'
 import { RequestsTable } from '@/features/requests/components/requests-table'
 import { requestColumnsCompact } from '@/features/requests/components/requests-columns'
+import { RequestsDialogs } from '@/features/requests/components/requests-dialogs'
 import { useNavigate } from '@tanstack/react-router'
 import { useAuthStore } from '@/stores/authStore'
 
@@ -91,6 +92,7 @@ function DashboardInner() {
           </CardHeader>
           <CardContent>
             <RequestsTable data={data ?? []} columns={requestColumnsCompact} />
+            <RequestsDialogs />
           </CardContent>
         </Card>
       </Main>

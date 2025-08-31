@@ -1,8 +1,11 @@
 import { HTMLAttributes, useState } from 'react'
 import { z } from 'zod'
+import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useNavigate, useSearch } from '@tanstack/react-router'
+import { useAuthStore } from '@/stores/authStore'
+import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -15,9 +18,6 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
-import { useAuthStore } from '@/stores/authStore'
-import axios from 'axios'
-import { api } from '@/lib/api'
 
 type UserAuthFormProps = HTMLAttributes<HTMLFormElement>
 
@@ -48,14 +48,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     setIsLoading(true)
     setError(null)
     try {
-      const res = await api.post(
-        '/api/authenticate',
-        {
-          username: data.username,
-          password: data.password,
-          rememberMe: true,
-        }
-      )
+      const res = await api.post('/api/authenticate', {
+        username: data.username,
+        password: data.password,
+        rememberMe: true,
+      })
       const token: string | undefined = res.data?.id_token
       if (!token) throw new Error('Invalid response from server')
       setAccessToken(token)
@@ -72,7 +69,14 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           exp: 0,
         })
       } catch {
-        setUser({ accountNo: '', email: '', firstName: 'Utilisateur', lastName: '', role: [], exp: 0 })
+        setUser({
+          accountNo: '',
+          email: '',
+          firstName: 'Utilisateur',
+          lastName: '',
+          role: [],
+          exp: 0,
+        })
       }
       const to = search?.redirect || '/'
       navigate({ to })
@@ -97,7 +101,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder='admin or user' {...field} />
+                <Input placeholder='Numéro CIN' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -125,10 +129,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         <Button className='mt-2' disabled={isLoading}>
           Login
         </Button>
-        {error && (
-          <p className='text-sm text-red-600 mt-2'>{error}</p>
-        )}
-
+        {error && <p className='mt-2 text-sm text-red-600'>{error}</p>}
       </form>
     </Form>
   )

@@ -6,6 +6,13 @@ export default function SignIn() {
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2">
       <div className="flex items-center justify-center py-12">
         <div className="mx-auto w-full max-w-md space-y-6 px-6">
+          <div className="flex justify-center mb-6">
+            <img
+              src="/images/municipality-logo.png"
+              alt="Municipality Logo"
+              className="h-18 w-auto"
+            />
+          </div>
           <div className="space-y-2 text-center">
             <h1 className="text-2xl font-bold tracking-tight">Se connecter</h1>
             <p className="text-muted-foreground">
