@@ -21,18 +21,30 @@ import {
 } from '@/components/ui/table'
 import { RequestRow } from '../data/schema'
 import { DataTablePagination } from '@/features/users/components/data-table-pagination'
-import { RequestsToolbar } from './requests-toolbar'
+import { DataTableToolbar } from './data-table-toolbar'
 import { useI18n } from '@/context/i18n-context'
 
 interface DataTableProps {
   columns: ColumnDef<RequestRow>[]
   data: RequestRow[]
+  searchPlaceholder?: string
+  customToolbar?: React.ComponentType<{ table: any }>
 }
 
-export function RequestsTable({ columns, data }: DataTableProps) {
+export function RequestsTable({ columns, data, searchPlaceholder, customToolbar }: DataTableProps) {
   const { t } = useI18n()
   const [rowSelection, setRowSelection] = useState({})
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+    // Ensure all columns are visible by default
+    select: true,
+    type: true,
+    description: true,
+    citizenName: true,
+    citizenContact: true,
+    status: true,
+    createdAt: true,
+    actions: true,
+  })
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [sorting, setSorting] = useState<SortingState>([])
 
@@ -52,7 +64,10 @@ export function RequestsTable({ columns, data }: DataTableProps) {
 
   return (
     <div className='space-y-4'>
-      <RequestsToolbar table={table} />
+      {(() => {
+        const ToolbarComponent = customToolbar || DataTableToolbar;
+        return <ToolbarComponent table={table} searchPlaceholder={searchPlaceholder} />;
+      })()}
       <div className='overflow-hidden rounded-md border'>
         <Table>
           <TableHeader>

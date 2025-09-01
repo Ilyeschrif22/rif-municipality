@@ -6,6 +6,7 @@ import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { serviceDefinitions } from '@/features/requests/data/services'
+import { encryptServiceId } from '@/lib/url-encryption'
 
 export const Route = createFileRoute('/_authenticated/services/')({
   component: ServicesIndexPage,
@@ -40,7 +41,7 @@ function ServicesIndexPage() {
               <ul className='space-y-2'>
                 {tnServices.map((s) => (
                   <li key={s.value}>
-                    <Link to={(`/services/${s.value}` as unknown) as any} className='text-primary hover:underline'>
+                    <Link to={(`/services/${encryptServiceId(s.value)}` as unknown) as any} className='text-primary hover:underline'>
                       {s.label}
                     </Link>
                   </li>
@@ -57,7 +58,7 @@ function ServicesIndexPage() {
               <ul className='space-y-2'>
                 {snServices.map((s) => (
                   <li key={s.value}>
-                    <Link to={(`/services/${s.value}` as unknown) as any} className='text-primary hover:underline'>
+                    <Link to={(`/services/${encryptServiceId(s.value)}` as unknown) as any} className='text-primary hover:underline'>
                       {s.label}
                     </Link>
                   </li>

@@ -28,7 +28,6 @@ const formSchema = z.object({
   country: z.enum(['Tunisie', 'Sénégal']),
   service: z.string().min(1, 'Le type de service est requis.'),
   dynamic: z.record(z.string(), z.any()).optional(),
-  description: z.string().min(1, 'La description est requise.'),
   documents: z.array(z.string()).optional(),
   documentsFiles: z.record(z.string(), z.any()).optional(),
 })
@@ -52,8 +51,8 @@ export function RequestsActionDialog({ currentRow, open, onOpenChange, onSubmitF
   const form = useForm<RequestForm>({
     resolver: zodResolver(formSchema),
     defaultValues: isEdit
-      ? { country: 'Tunisie', service: currentRow!.type, description: currentRow!.description, documents: [], documentsFiles: {} }
-      : { country: 'Tunisie', service: '', description: '', dynamic: {}, documents: [], documentsFiles: {} },
+      ? { country: 'Tunisie', service: currentRow!.type, documents: [], documentsFiles: {} }
+      : { country: 'Tunisie', service: '', dynamic: {}, documents: [], documentsFiles: {} },
   })
 
   const availableServices = useMemo(
@@ -164,21 +163,6 @@ export function RequestsActionDialog({ currentRow, open, onOpenChange, onSubmitF
                   />
                 </div>
               </div>
-
-              {/* Description first, full width */}
-              <FormField
-                control={form.control}
-                name='description'
-                render={({ field }) => (
-                  <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1 md:col-span-2'>
-                    <FormLabel className='col-span-2 text-right'>Description</FormLabel>
-                    <FormControl>
-                      <textarea className='col-span-4 w-full rounded border p-2' rows={4} {...field} />
-                    </FormControl>
-                    <FormMessage className='col-span-4 col-start-3' />
-                  </FormItem>
-                )}
-              />
 
               {/* Section: Champs dynamiques */}
               {serviceConfig?.fields.length ? (

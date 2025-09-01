@@ -40,8 +40,6 @@ export function RequestsDialogs() {
                 .join(' | ')
             : ''
           const description = dynamicPart
-            ? `${values.description} | ${dynamicPart}`
-            : values.description
           createMut.mutate({
             type: values.service,
             description,
@@ -70,8 +68,6 @@ export function RequestsDialogs() {
                     .join(' | ')
                 : ''
               const description = dynamicPart
-                ? `${values.description} | ${dynamicPart}`
-                : values.description
               updateMut.mutate({
                 id: Number(currentRow.id),
                 payload: {

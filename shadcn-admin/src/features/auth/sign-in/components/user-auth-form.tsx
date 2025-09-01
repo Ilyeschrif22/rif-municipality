@@ -62,9 +62,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         const acc = accRes.data as any
         setUser({
           accountNo: acc?.login ?? '',
-          email: acc?.email ?? '',
-          firstName: acc?.firstName ?? '',
-          lastName: acc?.lastName ?? '',
+          email: acc?.details?.email ?? acc?.email ?? '',
+          firstName: acc?.details?.firstName ?? acc?.firstName ?? '',
+          lastName: acc?.details?.lastName ?? acc?.lastName ?? '',
           role: Array.isArray(acc?.authorities) ? acc.authorities : [],
           exp: 0,
         })
@@ -99,9 +99,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           name='username'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>CIN</FormLabel>
               <FormControl>
-                <Input placeholder='Numéro CIN' {...field} />
+                <Input placeholder='Entrez votre numéro CIN' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

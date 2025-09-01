@@ -24,12 +24,12 @@ import {
 import { Input } from '@/components/ui/input'
 import { SelectDropdown } from '@/components/select-dropdown'
 import { serviceDefinitions, type ServiceDefinition } from './data/services'
+import { getServiceIdFromUrl } from '@/lib/url-encryption'
 
 const schema = z.object({
   country: z.enum(['Tunisie', 'Sénégal']),
   service: z.string().min(1, 'Le type de service est requis.'),
   dynamic: z.record(z.string(), z.any()).optional(),
-  description: z.string().min(1, 'La description est requise.'),
 })
 
 type FormValues = z.infer<typeof schema>
@@ -46,7 +46,7 @@ export default function CreateRequestPage() {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { country: 'Tunisie', service: '', description: '', dynamic: {} },
+    defaultValues: { country: 'Tunisie', service: '', dynamic: {} },
   })
 
   // Preselect via search params if provided
@@ -56,8 +56,14 @@ export default function CreateRequestPage() {
       form.setValue('country', search.country)
     }
     if (search.service) {
-      setSelectedService(search.service)
-      form.setValue('service', search.service)
+      const decryptedService = getServiceIdFromUrl(search.service)
+      if (decryptedService) {
+        setSelectedService(decryptedService)
+        form.setValue('service', decryptedService)
+      } else {
+        setSelectedService(search.service)
+        form.setValue('service', search.service)
+      }
     }
   }, [search.country, search.service])
 
@@ -87,7 +93,7 @@ export default function CreateRequestPage() {
       .filter(([, f]) => !!f)
       .map(([doc, f]) => `${doc}: ${(f as File).name}`)
       .join(' | ')
-    const descriptionParts = [values.description, dynamicPart, docsPart].filter(Boolean)
+    const descriptionParts = [dynamicPart, docsPart].filter(Boolean)
     const description = descriptionParts.join(' | ')
 
     // NOTE: Files are not posted yet; wire to backend when available. We include filenames in description for now.
@@ -178,21 +184,6 @@ export default function CreateRequestPage() {
                           placeholder='Sélectionner le service'
                           items={availableServices.map((s) => ({ label: s.label, value: s.value }))}
                         />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Description */}
-                <FormField
-                  control={form.control}
-                  name='description'
-                  render={({ field }) => (
-                    <FormItem className='space-y-1 md:col-span-2'>
-                      <FormLabel>Description</FormLabel>
-                      <FormControl>
-                        <textarea rows={4} className='w-full rounded border p-2' {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

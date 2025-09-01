@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { serviceDefinitions } from '@/features/requests/data/services'
 import { useI18n } from '@/context/i18n-context'
+import { getServiceIdFromUrl } from '@/lib/url-encryption'
 
 export const Route = createFileRoute('/_authenticated/services/$serviceId')({
   component: ServiceDetailPage,
@@ -17,7 +18,10 @@ function ServiceDetailPage() {
   const { t } = useI18n()
   const params = Route.useParams() as { serviceId: string }
   const { serviceId } = params
-  const service = serviceDefinitions.find((s) => s.value === serviceId)
+  
+  // Decrypt the service ID from URL if it's encrypted
+  const decryptedServiceId = getServiceIdFromUrl(serviceId)
+  const service = serviceDefinitions.find((s) => s.value === decryptedServiceId)
 
   return (
     <>

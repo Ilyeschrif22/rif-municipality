@@ -45,12 +45,6 @@ const RequestInfo = ({ request }: { request?: RequestDTO }) => (
           ) : 'N/A'}
         </div>
       </div>
-      <div className="md:col-span-2">
-        <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">Description</div>
-        <div className="rounded-md border bg-gray-100 dark:bg-gray-800 p-3 text-sm leading-relaxed">
-          {request?.description || 'Aucune description disponible.'}
-        </div>
-      </div>
     </div>
   </SectionCard>
 );

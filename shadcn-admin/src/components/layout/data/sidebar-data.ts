@@ -12,6 +12,7 @@ import {
 } from '@tabler/icons-react'
 import { serviceDefinitions } from '@/features/requests/data/services'
 import { type SidebarData } from '../types'
+import { encryptServiceId } from '@/lib/url-encryption'
 
 export const sidebarData: SidebarData = {
   user: {
@@ -34,7 +35,7 @@ export const sidebarData: SidebarData = {
           items: [
             ...serviceDefinitions.map((s) => ({
               title: s.shortLabel ?? s.label,
-              url: `/services/${s.value}` as unknown as any,
+              url: `/services/${encryptServiceId(s.value)}` as unknown as any,
             })),
           ],
         },

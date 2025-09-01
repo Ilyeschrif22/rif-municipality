@@ -45,6 +45,11 @@ export interface RequestDTO {
   resolvedDate?: string
   citizenId?: number
   municipalityId?: number
+  citizenFirstName?: string
+  citizenLastName?: string
+  citizenEmail?: string
+  citizenPhone?: string
+  citizenCin?: string
 }
 
 export async function fetchRequests(): Promise<RequestDTO[]> {
@@ -68,7 +73,7 @@ export async function createRequest(payload: RequestDTO): Promise<RequestDTO> {
 }
 
 export async function updateRequest(id: number, payload: RequestDTO): Promise<RequestDTO> {
-  const res = await api.put<RequestDTO>(`/api/requests/${id}`, { ...payload, id })
+  const res = await api.patch<RequestDTO>(`/api/requests/${id}`, { ...payload, id })
   return res.data
 }
 

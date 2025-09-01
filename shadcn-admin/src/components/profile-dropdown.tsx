@@ -14,47 +14,71 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 export function ProfileDropdown() {
-  const { reset } = useAuthStore((s) => s.auth)
+  const { reset, user } = useAuthStore((s) => s.auth)
+  
+  // Generate user initials for avatar fallback
+  const getUserInitials = () => {
+    if (user?.firstName && user?.lastName) {
+      return `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase()
+    } else if (user?.firstName) {
+      return user.firstName.charAt(0).toUpperCase()
+    } else if (user?.email) {
+      return user.email.charAt(0).toUpperCase()
+    }
+    return 'U'
+  }
+
+  // Get display name
+  const getDisplayName = () => {
+    if (user?.firstName && user?.lastName) {
+      return `${user.firstName} ${user.lastName}`
+    } else if (user?.firstName) {
+      return user.firstName
+    } else if (user?.email) {
+      return user.email
+    }
+    return 'Utilisateur'
+  }
+
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
           <Avatar className='h-8 w-8'>
-            <AvatarImage src='/avatars/01.png' alt='@shadcn' />
-            <AvatarFallback>SN</AvatarFallback>
+            <AvatarImage src='/avatars/01.png' alt={getDisplayName()} />
+            <AvatarFallback>{getUserInitials()}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-56' align='end' forceMount>
         <DropdownMenuLabel className='font-normal'>
           <div className='flex flex-col space-y-1'>
-            <p className='text-sm leading-none font-medium'>satnaing</p>
+            <p className='text-sm leading-none font-medium'>{getDisplayName()}</p>
             <p className='text-muted-foreground text-xs leading-none'>
-              satnaingdev@gmail.com
+              {user?.email || 'Aucun email'}
             </p>
+            {user?.role && user.role.length > 0 && (
+              <p className='text-muted-foreground text-xs leading-none'>
+                {user.role.includes('ROLE_ADMIN') ? 'Administrateur' : 
+                 user.role.includes('ROLE_AGENT') ? 'Agent' : 'Utilisateur'}
+              </p>
+            )}
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
             <Link to='/settings'>
-              Profile
+              Profil
               <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link to='/settings'>
-              Billing
-              <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link to='/settings'>
-              Settings
+              Paramètres
               <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>New Team</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
@@ -64,7 +88,7 @@ export function ProfileDropdown() {
               reset()
             }}
           >
-            Log out
+            Se déconnecter
             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
           </Link>
         </DropdownMenuItem>

@@ -14,6 +14,11 @@ export const requestSchema = z.object({
   ]),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
+  citizenFirstName: z.string().optional(),
+  citizenLastName: z.string().optional(),
+  citizenEmail: z.string().optional(),
+  citizenPhone: z.string().optional(),
+  citizenCin: z.string().optional(),
 })
 
 export type RequestRow = z.infer<typeof requestSchema>

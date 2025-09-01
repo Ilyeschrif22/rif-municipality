@@ -14,12 +14,12 @@ export const callTypes = new Map<UserStatus, string>([
 export const userTypes = [
   {
     label: 'Agent',
-    value: 'agent',
+    value: 'ROLE_AGENT',
     icon: IconUserShield,
   },
   {
     label: 'User',
-    value: 'user',
+    value: 'ROLE_USER',
     icon: IconUsersGroup,
   },
 ] as const

@@ -1,5 +1,6 @@
 package com.example.gateway.web.rest;
 
+import com.example.gateway.repository.AppUserRepository;
 import com.example.gateway.security.SecurityUtils;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import java.security.Principal;
@@ -22,6 +23,12 @@ public class AccountResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(AccountResource.class);
 
+    private final AppUserRepository appUserRepository;
+
+    public AccountResource(AppUserRepository appUserRepository) {
+        this.appUserRepository = appUserRepository;
+    }
+
     private static class AccountResourceException extends RuntimeException {
 
         private static final long serialVersionUID = 1L;
@@ -41,7 +48,23 @@ public class AccountResource {
     @GetMapping("/account")
     public Mono<UserVM> getAccount(Principal principal) {
         if (principal instanceof AbstractAuthenticationToken) {
-            return Mono.just(getUserFromAuthentication((AbstractAuthenticationToken) principal));
+            AbstractAuthenticationToken authToken = (AbstractAuthenticationToken) principal;
+            String cin = authToken.getName();
+            
+            return appUserRepository.findByCin(cin)
+                .map(appUser -> new UserVM(
+                    appUser.getCin(),
+                    Set.of(appUser.getRole()),
+                    Map.of(
+                        "firstName", appUser.getFirstName() != null ? appUser.getFirstName() : "",
+                        "lastName", appUser.getLastName() != null ? appUser.getLastName() : "",
+                        "email", appUser.getEmail() != null ? appUser.getEmail() : "",
+                        "phone", appUser.getPhone() != null ? appUser.getPhone() : "",
+                        "activated", true,
+                        "langKey", "fr"
+                    )
+                ))
+                .switchIfEmpty(Mono.error(new AccountResourceException("User not found in database")));
         } else {
             throw new AccountResourceException("User could not be found");
         }
@@ -75,20 +98,5 @@ public class AccountResource {
         public Map<String, Object> getDetails() {
             return details;
         }
-    }
-
-    private static UserVM getUserFromAuthentication(AbstractAuthenticationToken authToken) {
-        Map<String, Object> attributes;
-        if (authToken instanceof JwtAuthenticationToken) {
-            attributes = ((JwtAuthenticationToken) authToken).getTokenAttributes();
-        } else {
-            throw new IllegalArgumentException("AuthenticationToken is not OAuth2 or JWT!");
-        }
-
-        return new UserVM(
-            authToken.getName(),
-            authToken.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet()),
-            SecurityUtils.extractDetailsFromTokenAttributes(attributes)
-        );
     }
 }

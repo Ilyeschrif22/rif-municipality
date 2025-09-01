@@ -54,7 +54,6 @@ function LanguageSwitcher() {
   const { language, setLanguage, t } = useI18n()
   return (
     <div className='hidden items-center gap-2 sm:flex'>
-      <label className='text-xs text-muted-foreground'>{t('lang.' + language)}</label>
       <select
         value={language}
         onChange={(e) => setLanguage(e.target.value as any)}
