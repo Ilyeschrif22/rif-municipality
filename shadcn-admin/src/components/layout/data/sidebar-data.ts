@@ -58,11 +58,7 @@ export const sidebarData: SidebarData = {
               url: '/settings',
               icon: IconUserCog,
             },
-            {
-              title: 'Compte',
-              url: '/settings/account',
-              icon: IconTool,
-            },
+
             {
               title: 'Apparence',
               url: '/settings/appearance',

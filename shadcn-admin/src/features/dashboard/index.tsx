@@ -13,7 +13,7 @@ import { fetchRequests, fetchMyRequests } from '@/lib/api'
 import { requestListSchema, type RequestRow } from '@/features/requests/data/schema'
 import { RequestsProvider } from '@/features/requests/context/requests-context'
 import { RequestsTable } from '@/features/requests/components/requests-table'
-import { requestColumns, requestColumnsCompact, agentRequestColumns } from '@/features/requests/components/requests-columns'
+import { requestColumns, requestColumnsCompact, agentRequestColumns, userRequestColumns } from '@/features/requests/components/requests-columns'
 import { AgentDataTableToolbar } from '@/features/requests/components/agent-data-table-toolbar'
 import { RequestsDialogs } from '@/features/requests/components/requests-dialogs'
 import { useNavigate } from '@tanstack/react-router'
@@ -55,10 +55,11 @@ function UserDashboard() {
       <Main>
         <div className='mb-2 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0'>
           <div className='mb-4 sm:mb-0'>
-            <h1 className='text-xl sm:text-2xl font-bold tracking-tight'>{t('dashboard.title')}</h1>
+            <h1 className='text-xl sm:text-2xl font-bold tracking-tight'>Tableau de bord</h1>
+            <p className='text-sm sm:text-base text-muted-foreground'>Gérez vos demandes de services municipaux</p>
           </div>
           <div className='flex items-center space-x-2'>
-            <Button onClick={() => navigate({ to: '/requests/new' })} className='w-full sm:w-auto'>{t('actions.newRequest')}</Button>
+            <Button onClick={() => navigate({ to: '/requests/new' })} className='w-full sm:w-auto'>Nouvelle demande</Button>
           </div>
         </div>
 
@@ -68,39 +69,28 @@ function UserDashboard() {
             <div className='flex items-center gap-2 text-primary'>
               <Info className='h-3 w-3' />
               <Badge variant='secondary' className='h-3.5 px-1.5 py-0 border-primary/30 bg-primary/10 text-primary text-[9px]'>
-                {t('welcome.badge')}
+                Bienvenue
               </Badge>
-              {(() => {
-                const name = (user?.firstName && user?.lastName)
-                  ? `${user.firstName} ${user.lastName}`
-                  : (user?.email || 'Utilisateur')
-                const template = t('welcome.line')
-                const parts = template.split('{name}')
-                return (
-                  <span className='text-[13px] leading-tight font-normal text-primary'>
-                    {parts[0]}
-                    <span className='font-semibold'>{name}</span>
-                    {parts[1] ?? ''}
-                  </span>
-                )
-              })()}
+              <span className='text-[13px] leading-tight font-normal text-primary'>
+                Bonjour <span className='font-semibold'>{user?.firstName || 'Utilisateur'}</span>, 
+                consultez et gérez vos demandes de services ici.
+              </span>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('dashboard.myRequests')}</CardTitle>
-            <CardDescription>{t('dashboard.myRequestsDesc')}</CardDescription>
+            <CardTitle>Mes demandes de services</CardTitle>
+            <CardDescription>Suivez l'état de vos demandes et consultez leur progression</CardDescription>
           </CardHeader>
           <CardContent>
             <RequestsTable 
               key="user-requests-table"
               data={data ?? []} 
-              columns={agentRequestColumns} 
+              columns={userRequestColumns} 
               customToolbar={AgentDataTableToolbar}
             />
-            <RequestsDialogs />
           </CardContent>
         </Card>
       </Main>

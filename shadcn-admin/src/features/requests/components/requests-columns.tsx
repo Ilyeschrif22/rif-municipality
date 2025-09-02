@@ -306,6 +306,102 @@ export const requestColumnsCompact: ColumnDef<RequestRow>[] = [
   },
 ]
 
+// User variant: compact without CIN details
+export const userRequestColumns: ColumnDef<RequestRow>[] = [
+  {
+    id: 'select',
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && 'indeterminate')
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label='Select all'
+        className='translate-y-[2px]'
+      />
+    ),
+    meta: {
+      className: cn(
+        'sticky md:table-cell left-0 z-10 rounded-tl',
+        'bg-background group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted'
+      ),
+    },
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label='Select row'
+        className='translate-y-[2px]'
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: 'type',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Type de service' />
+    ),
+    cell: ({ row }) => {
+      const type: string = row.getValue('type')
+      const requestType = requestTypeIcons.find(({ value }) => value === type.toUpperCase())
+      return (
+        <div className="flex items-center gap-x-2 min-w-[160px]">
+          {requestType?.icon ? (
+            <requestType.icon size={16} className="text-muted-foreground shrink-0" />
+          ) : null}
+          <LongText className="max-w-56">{type}</LongText>
+        </div>
+      )
+    },
+    meta: { className: 'sticky left-6 md:table-cell' },
+    enableHiding: false,
+  },
+  {
+    accessorKey: 'status',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Statut' />
+    ),
+    cell: ({ row }) => {
+      const status = row.original.status
+      const badgeColor = requestStatusTypes.get(status)
+      const { t } = useI18n()
+      return (
+        <div className="flex space-x-2 min-w-[120px]">
+          <Badge variant="outline" className={cn('capitalize', badgeColor)}>
+            {status === 'PENDING' && t('status.PENDING')}
+            {status === 'IN_PROGRESS' && t('status.IN_PROGRESS')}
+            {status === 'RESOLVED' && t('status.RESOLVED')}
+            {status === 'REJECTED' && t('status.REJECTED')}
+          </Badge>
+        </div>
+      )
+    },
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: 'createdAt',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Date de création' />
+    ),
+    cell: ({ row }) => {
+      const date = row.getValue('createdAt') as Date
+      return <div className="min-w-[120px]">{date.toLocaleDateString('fr-FR')}</div>
+    },
+  },
+  {
+    id: 'actions',
+    cell: ({ row }) => (
+      <DataTableRowActions
+        row={row}
+      />
+    ),
+    meta: { className: 'min-w-[56px] w-[56px]' },
+  },
+]
+
 export const agentRequestColumns: ColumnDef<RequestRow>[] = [
   {
     id: 'select',

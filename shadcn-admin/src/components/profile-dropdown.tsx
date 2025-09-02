@@ -57,6 +57,11 @@ export function ProfileDropdown() {
             <p className='text-muted-foreground text-xs leading-none'>
               {user?.email || 'Aucun email'}
             </p>
+            {user?.accountNo && (
+              <p className='text-muted-foreground text-xs leading-none'>
+                CIN: {user.accountNo}
+              </p>
+            )}
             {user?.role && user.role.length > 0 && (
               <p className='text-muted-foreground text-xs leading-none'>
                 {user.role.includes('ROLE_ADMIN') ? 'Administrateur' : 
@@ -71,12 +76,6 @@ export function ProfileDropdown() {
             <Link to='/settings'>
               Profil
               <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link to='/settings'>
-              Paramètres
-              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
